@@ -5,12 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game</title>
     <style>
+      :root {
+        --bg: #07111f;
+        --panel: rgba(11, 24, 38, 0.75);
+        --accent: #6ee7b7;
+        --accent-2: #7dd3fc;
+        --text: #f8fafc;
+      }
+
+      * { box-sizing: border-box; }
+
       html, body {
         margin: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #000;
+        background: var(--bg);
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .frame-wrap {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      body.started .frame-wrap {
+        opacity: 1;
+        pointer-events: auto;
       }
 
       .game-frame {
@@ -18,16 +49,81 @@
         height: 100vh;
         border: 0;
         display: block;
+        background: #000;
+      }
+
+      .play-overlay {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        min-width: 220px;
+        padding: 34px 28px;
+        border-radius: 18px;
+        background: var(--panel);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+
+      body.started .play-overlay {
+        opacity: 0;
+        transform: scale(0.95);
+        pointer-events: none;
+      }
+
+      .play-title {
+        margin: 0;
+        color: var(--text);
+        letter-spacing: 1px;
+        font-size: 1.1rem;
+      }
+
+      .play-btn {
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #04131d;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 14px 28px;
+        cursor: pointer;
+        box-shadow: 0 12px 30px rgba(110, 231, 183, 0.35);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+
+      .play-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 35px rgba(110, 231, 183, 0.45);
       }
     </style>
   </head>
   <body>
-    <iframe
-      class="game-frame"
-      src="https://scratch.mit.edu/projects/1204146273/embed"
-      allowtransparency="true"
-      scrolling="no"
-      allowfullscreen
-    ></iframe>
+    <div class="frame-wrap">
+      <iframe
+        class="game-frame"
+        src="https://scratch.mit.edu/projects/1204146273/embed"
+        allowtransparency="true"
+        scrolling="no"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="play-overlay">
+      <h1 class="play-title">Ready to play?</h1>
+      <button class="play-btn" id="playButton" type="button">Play</button>
+    </div>
+
+    <script>
+      const playButton = document.getElementById('playButton');
+      playButton.addEventListener('click', () => {
+        document.body.classList.add('started');
+      });
+    </script>
   </body>
 </html>
